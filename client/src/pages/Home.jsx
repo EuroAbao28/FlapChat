@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { checkuser, getAllUsers } from "../utils/APIRoutes";
 import { Outlet, useNavigate } from "react-router-dom";
-import Spinner from "../components/Spinner";
 import { Context } from "../App";
 import "./Home.css";
 import SideNav from "../components/SideNav";

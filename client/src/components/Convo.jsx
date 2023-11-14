@@ -8,6 +8,7 @@ import {
   checkuser,
   getMessages,
   getUserToChat,
+  host,
   sendMessage,
 } from "../utils/APIRoutes";
 import axios from "axios";
@@ -15,7 +16,6 @@ import ChatInput from "./ChatInput";
 import Messages from "./Messages";
 import Spinner from "./Spinner";
 import io from "socket.io-client";
-import host from "../utils/APIRoutes";
 
 function Convo() {
   const navigate = useNavigate();

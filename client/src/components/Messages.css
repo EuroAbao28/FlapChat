@@ -1,0 +1,93 @@
+.messages-container {
+  flex: 1;
+  color: var(--wht-8);
+  background-color: var(--clr-bg-base-darker);
+
+  position: relative;
+  overflow-y: auto;
+}
+
+.messages-container .message-scroll {
+  width: 100%;
+  padding: 2rem;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.message-scroll .text-container {
+  display: flex;
+}
+
+.message-scroll .text-container.replied {
+  justify-content: flex-start;
+}
+
+.message-scroll .text-container.sent {
+  justify-content: flex-end;
+}
+
+.message-scroll .text-container .text {
+  max-width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-scroll .text-container.replied .text .body-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.message-scroll .text-container.sent .text .body-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.message-scroll .text p {
+  background-color: var(--clr-bg-base);
+  padding: 1rem;
+  border-radius: 1rem;
+  font-size: 1.4rem;
+  font-weight: 300;
+  word-break: break-all;
+}
+
+.message-scroll .text-container.sent p {
+  background-color: var(--clr-bg-base-lighter);
+}
+
+.message-scroll .text .date {
+  text-align: center;
+  color: var(--wht-4);
+  font-size: 1.2rem;
+  transition: all 0.15s ease-in-out;
+  height: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* FIX THE WIDTH OF SMALL CHAT */
+
+.message-scroll .text .date::before {
+  content: "  ";
+  height: 1px;
+  width: 2rem;
+  background-color: var(--wht-4);
+  margin-right: 1rem;
+}
+
+.message-scroll .text .date::after {
+  content: "  ";
+  height: 1px;
+  width: 2rem;
+  background-color: var(--wht-4);
+  margin-left: 1rem;
+}
+
+.message-scroll .text .date.show {
+  height: 2rem;
+  margin-top: 1rem;
+}

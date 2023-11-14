@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+:root {
+  --clr-bg-base-lighter: #242d34;
+  --clr-bg-base: #0e1317;
+  --clr-bg-base-darker: rgb(8, 11, 15);
+
+  --clr-bg-lighter: #2f2e30;
+
+  --blck-8: rgba(0, 0, 0, 0.8);
+  --blck-6: rgba(0, 0, 0, 0.6);
+  --blck-5: rgba(0, 0, 0, 0.5);
+  --blck-4: rgba(0, 0, 0, 0.4);
+  --blck-3: rgba(0, 0, 0, 0.3);
+
+  --wht-9: rgba(255, 255, 255, 0.9);
+  --wht-8: rgba(255, 255, 255, 0.8);
+  --wht-6: rgba(255, 255, 255, 0.6);
+  --wht-5: rgba(255, 255, 255, 0.5);
+  --wht-4: rgba(255, 255, 255, 0.4);
+
+  --shdw-header: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+* {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background-color: var(--clr-bg-base);
+}
+
+.toast {
+  font-size: 1.4rem;
+}
+
+/* Customize the scrollbar track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Customize the scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background: var(--clr-bg-base-lighter);
+  border-radius: 10px;
+}
+
+/* Customize the scrollbar's width and height */
+::-webkit-scrollbar {
+  width: 0.4rem;
+  height: 3rem;
+}
+
+@media screen and (max-width: 630px) {
+  .welcome-container {
+    position: absolute;
+    z-index: -10;
+    display: none;
+  }
+}
+
+@media screen and (min-width: 630px) {
+  .home-container {
+    display: grid;
+    grid-template-columns: 35% 65%;
+  }
+
+  .convo-container {
+    position: relative;
+  }
+
+  .convo-container .back {
+    display: none;
+  }
+
+  .sidenav-container {
+    border-right: 1px solid var(--clr-bg-base-darker);
+  }
+}
+
+@media screen and (min-width: 860px) {
+  .home-container {
+    grid-template-columns: 30% 70%;
+  }
+
+  .messages-container .text-container .text {
+    max-width: 60%;
+  }
+}
+
+@media screen and (min-width: 1020px) {
+  .home-container {
+    grid-template-columns: 25% 75%;
+  }
+
+  .messages-container .text-container .text {
+    max-width: 45%;
+  }
+}

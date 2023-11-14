@@ -1,0 +1,9 @@
+.home-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: var(--clr-bg-base);
+
+  /* for profile overlay*/
+  overflow-y: hidden;
+}

@@ -1,0 +1,82 @@
+.form-container {
+  padding: 2rem;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container form {
+  width: 100%;
+  max-width: 40rem;
+  padding: 2rem;
+}
+
+.form-container form > * {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.form-container .logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 4rem;
+}
+
+.form-container .logo-container img {
+  width: 5rem;
+}
+
+.form-container .logo-container h1 {
+  color: aqua;
+  font-size: 3.2rem;
+  letter-spacing: 1px;
+}
+
+.form-container form input,
+.form-container form button {
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.form-container form input {
+  background: none;
+  border: 1px solid var(--wht-4);
+  color: var(--wht-8);
+  font-size: 1.4rem;
+}
+
+.form-container form input:focus {
+  outline: 1px solid aqua;
+}
+
+.form-container form button {
+  background-color: aqua;
+  color: var(--clr-base);
+  border: none;
+  font-weight: 600;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.form-container form button.disabled {
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.form-container form .switch {
+  text-align: center;
+  color: var(--wht-8);
+  font-size: 1.2rem;
+}
+
+.switch a {
+  color: var(--wht-8);
+  text-decoration: underline;
+  font-weight: 600;
+  padding: 0.1rem;
+  cursor: pointer;
+}

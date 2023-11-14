@@ -1,0 +1,187 @@
+.sidenav-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  box-shadow: var(--shdw-header);
+  position: relative;
+  overflow: hidden;
+}
+
+/* now fix the sidenav user overlay */
+
+.sidenav-container .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+}
+
+.sidenav-container .header .brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header .brand img {
+  height: 2.6rem;
+}
+
+.header .brand h1 {
+  font-size: 2.4rem;
+  color: aqua;
+}
+
+.header .profile {
+  border-radius: 10rem;
+  display: grid;
+  place-items: center;
+  transition: all 0.25s ease-in-out;
+}
+
+.header .profile:hover {
+  outline: 1px solid aqua;
+}
+
+.header .profile img {
+  height: 3.4rem;
+  cursor: pointer;
+  margin: 0.1rem;
+}
+
+.sidenav-container .search-container {
+  background-color: var(--clr-bg-base-lighter);
+  border-radius: 10rem;
+  margin: 1rem 2rem;
+}
+
+.search-container form {
+  display: flex;
+  align-items: center;
+  color: var(--wht-4);
+  font-size: 1.4rem;
+  padding: 0 1.5rem;
+}
+
+.search-container form input {
+  background: none;
+  border: none;
+  width: 100%;
+  font-size: 1.4rem;
+  color: var(--wht-8);
+  padding: 1rem;
+}
+
+.search-container form input:focus {
+  border: none;
+  outline: none;
+}
+
+.sidenav-container .contacts-container {
+  margin: 2rem;
+  flex: 1;
+  position: relative;
+  overflow-y: auto;
+}
+
+.contacts-container .scroll-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
+}
+
+.contacts-container .scroll-container .card {
+  padding: 1rem;
+  color: var(--wht-8);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.scroll-container .card:hover {
+  background-color: var(--clr-bg-base-darker);
+  border-radius: 0.5rem;
+}
+
+.scroll-container .card.selected {
+  background-color: var(--clr-bg-base-lighter);
+  border-radius: 0.5rem;
+}
+
+.scroll-container .card img {
+  width: 4rem;
+}
+
+.scroll-container .card .info {
+  flex: 1;
+}
+
+.card .info h2 {
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+.sidenav-container .profile-overlay {
+  background-color: var(--clr-bg-base-lighter);
+  position: absolute;
+  border-top-left-radius: 3rem;
+  border-top-right-radius: 3rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  bottom: -30rem;
+  transition: all 0.5s ease-in-out;
+  -webkit-box-shadow: 0px 0px 23px 3px var(--clr-bg-darker);
+  box-shadow: 0px 0px 23px 3px var(--clr-bg-base-darker);
+}
+
+.sidenav-container .profile-overlay.show {
+  bottom: 0;
+}
+
+.profile-overlay h2 {
+  color: aqua;
+  text-align: center;
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.profile-overlay section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  color: var(--wht-8);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.profile-overlay section.red {
+  color: rgb(221, 66, 66);
+}
+
+.profile-overlay section:hover {
+  background-color: var(--clr-bg-base);
+  border-radius: 1rem;
+}
+
+.profile-overlay section img {
+  width: 4rem;
+}
+
+.profile-overlay section p {
+  font-size: 1.4rem;
+  transition: all 0.15s ease-in-out;
+}
+
+.profile-overlay section svg {
+  font-size: 1.8rem;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 10rem;
+  padding: 0.9rem;
+}

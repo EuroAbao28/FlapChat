@@ -1,0 +1,54 @@
+.convo-container {
+  background-color: var(--clr-bg-base-darker);
+  z-index: 99;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.convo-container header {
+  background-color: var(--clr-bg-base);
+  display: flex;
+  justify-content: space-between;
+  box-shadow: var(--shdw-header);
+}
+
+.convo-container header .left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+}
+
+header .left .back {
+  color: var(--wht-8);
+  font-size: 3.6rem;
+  padding: 0.8rem;
+  cursor: pointer;
+}
+
+header .left img {
+  width: 4rem;
+}
+
+header .left h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--wht-8);
+}
+
+header .right {
+  color: var(--wht-8);
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+header .right .menu {
+  font-size: 3.6rem;
+  padding: 0.8rem;
+  cursor: pointer;
+}

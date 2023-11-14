@@ -1,0 +1,25 @@
+.welcome-container {
+  background-color: var(--clr-bg-base-darker);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome-container img {
+  width: 40%;
+}
+
+.welcome-container h1 {
+  color: var(--wht-8);
+  font-size: 3.6rem;
+}
+
+.welcome-container h1 span {
+  color: aqua;
+}
+
+.welcome-container p {
+  font-size: 1.6rem;
+  color: var(--wht-8);
+}

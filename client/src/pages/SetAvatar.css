@@ -1,0 +1,67 @@
+.setAvatar-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.setAvatar-container .content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+  max-width: 40rem;
+}
+
+.setAvatar-container h1 {
+  color: var(--wht-8);
+  font-size: 2.8rem;
+  text-align: center;
+}
+
+.setAvatar-container .avatars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.3rem;
+}
+
+.setAvatar-container .avatars div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.2rem;
+  border-radius: 50%;
+  transition: all 0.15s ease-in-out;
+}
+
+.setAvatar-container .avatars div.selected-avatar {
+  outline: 2px solid aqua;
+}
+
+.setAvatar-container .avatars div img {
+  width: 6rem;
+}
+
+.setAvatar-container .btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.setAvatar-container .btn-container button {
+  background-color: aqua;
+  color: var(--clr-base);
+  border: none;
+  font-weight: 600;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 1rem 2.5rem;
+  border-radius: 0.5rem;
+}
+
+.setAvatar-container .btn-container button.disabled {
+  text-decoration: line-through;
+}

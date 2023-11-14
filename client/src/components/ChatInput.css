@@ -1,0 +1,102 @@
+.chatInput-container {
+  background-color: var(--clr-bg-base);
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  gap: 1rem;
+  position: relative;
+}
+
+.chatInput-container .EmojiPickerReact.epr-main {
+  position: absolute;
+  background-color: var(--clr-bg-base-lighter);
+  border: none;
+  margin-top: -50rem;
+}
+
+.chatInput-container
+  .EmojiPickerReact
+  li.epr-emoji-category
+  > .epr-emoji-category-label {
+  background-color: var(--clr-bg-base-lighter);
+}
+
+.chatInput-container .EmojiPickerReact .epr-search-container input.epr-search {
+  border: 1px solid aqua;
+}
+
+.chatInput-container
+  .EmojiPickerReact
+  .epr-search-container
+  input.epr-search:focus {
+  background-color: var(--clr-bg-base-lighter);
+  outline: 1px solid aqua;
+}
+
+.chatInput-container .EmojiPickerReact .epr-search-container input.epr-search {
+  background-color: var(--clr-bg-base-lighter);
+}
+
+.chatInput-container form {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.chatInput-container form textarea {
+  flex: 1;
+  border: none;
+  background: none;
+  color: var(--wht-8);
+  padding: 1rem 1.5rem;
+  background-color: var(--clr-bg-base-lighter);
+  border-radius: 10rem;
+  resize: none;
+}
+
+.chatInput-container form textarea:focus {
+  border: none;
+  outline: none;
+}
+
+.chatInput-container .emoji-btn {
+  cursor: pointer;
+  border-radius: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: aqua;
+  font-size: 2.1rem;
+  display: flex;
+  transition: all 0.15s ease-in-out;
+}
+
+.chatInput-container .emoji-btn:hover {
+  background-color: var(--clr-bg-base-darker);
+}
+
+.chatInput-container .emoji-btn svg {
+  padding: 0.7rem;
+  font-size: 3.8rem;
+}
+
+.chatInput-container form button {
+  border-radius: 20rem;
+  padding: 0.7rem;
+  font-size: 3.8rem;
+  transition: all 0.15s ease-in-out;
+  border: none;
+  height: 4rem;
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--clr-bg-base);
+  cursor: pointer;
+  color: aqua;
+}
+
+.chatInput-container form button:hover {
+  background-color: var(--clr-bg-base-darker);
+}

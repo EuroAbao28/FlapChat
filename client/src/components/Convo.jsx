@@ -15,6 +15,7 @@ import ChatInput from "./ChatInput";
 import Messages from "./Messages";
 import Spinner from "./Spinner";
 import io from "socket.io-client";
+import host from "../utils/APIRoutes";
 
 function Convo() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ function Convo() {
   const dummy = "dummy";
 
   useEffect(() => {
-    socket.current = io("http://localhost:5000");
+    socket.current = io(host);
     socket.current.on("getMessage", (data) => {
       console.log("getMessage: ", data);
       setMessages((prev) => [...prev, data]);

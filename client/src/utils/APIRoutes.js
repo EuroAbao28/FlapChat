@@ -1,4 +1,4 @@
-const host = "http://localhost:5000";
+const host = "https://flap-chat.onrender.com";
 
 export const registerRoute = `${host}/api/auth/register`;
 export const loginRoute = `${host}/api/auth/login`;

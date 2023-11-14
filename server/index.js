@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/auth", require("./routes/userRoutes"));
 app.use("/api/message", require("./routes/messageRoute"));
-a;
+
 const io = new Server(server, {
   cors: {
     origin: "https://flap-chat.vercel.app",

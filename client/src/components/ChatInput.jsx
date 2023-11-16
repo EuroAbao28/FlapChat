@@ -4,7 +4,7 @@ import { BsEmojiSmileFill } from "react-icons/bs";
 import { BiSolidSend } from "react-icons/bi";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 
-function ChatInput({ message }) {
+function ChatInput({ messageInput }) {
   const [msg, setMsg] = useState("");
   const [toggleEmoji, setToggleEmoji] = useState(false);
 
@@ -15,7 +15,7 @@ function ChatInput({ message }) {
       return console.log("empty");
     }
 
-    message(msg);
+    messageInput(msg);
     setMsg("");
     setToggleEmoji(false);
   };

@@ -18,57 +18,35 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/auth", require("./routes/userRoutes"));
 app.use("/api/message", require("./routes/messageRoute"));
+app.use("/api/chatRoom", require("./routes/chatRoomRoutes"));
 
 const io = new Server(server, {
   cors: {
-    origin: "https://flap-chat.vercel.app",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
   },
 });
-
-let users = [];
-
-const addUser = (userId, socketId) => {
-  !users.some((user) => user.userId === userId) &&
-    users.push({ userId, socketId });
-};
-
-const removeUser = (socketId) => {
-  users = users.filter((user) => user.socketId !== socketId);
-};
-
-const getUser = (userId) => {
-  return users.find((user) => user.userId === userId);
-};
 
 io.on("connection", (socket) => {
   //when ceonnect
   console.log("a user connected.");
   console.log("user id  :", socket.id);
 
-  //take userId and socketId from user
-  socket.on("addUser", (userId) => {
-    addUser(userId, socket.id);
-    io.emit("getUsers", users);
+  socket.on("joinRoom", (data) => {
+    socket.join(data);
+    console.log("Room:", data);
   });
 
-  //send and get message
-  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-    const user = getUser(receiverId);
-    if (user) {
-      io.to(user.socketId).emit("getMessage", {
-        senderId,
-        text,
-      });
-      console.log("sent to:", user.socketId);
-    }
+  socket.on("sendMessage", (data) => {
+    console.log(
+      `Message from ${data.sender} to ${data.receiver}: ${data.text}. Room ${data.room}`
+    );
+    socket.to(data.room).emit("receiveMessage", data);
   });
 
   //when disconnect
   socket.on("disconnect", () => {
     console.log("a user disconnected!");
-    removeUser(socket.id);
-    io.emit("getUsers", users);
   });
 });
 

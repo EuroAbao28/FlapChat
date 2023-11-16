@@ -6,6 +6,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   checkuser,
+  getChatRoom,
   getMessages,
   getUserToChat,
   host,
@@ -18,100 +19,126 @@ import Spinner from "./Spinner";
 import io from "socket.io-client";
 
 function Convo() {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const { currentUser, socket } = useContext(Context);
-
-  const [userToChat, setUserToChat] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const { currentUser, currentChat, setCurrentChat, socket } =
+    useContext(Context);
+  const { id } = useParams();
   const [messages, setMessages] = useState([]);
+  const [roomId, setRoomId] = useState("");
 
-  const dummy = "dummy";
+  useEffect(() => {}, []);
 
-  useEffect(() => {
-    socket.current = io(host);
-    socket.current.on("getMessage", (data) => {
-      console.log("getMessage: ", data);
-      setMessages((prev) => [...prev, data]);
-      console.log("getMessage");
-    });
-  }, [id]);
-
-  useEffect(() => {
-    socket.current.emit("addUser", currentUser._id);
-  }, [currentUser]);
-
-  const sendMsg = async (msg) => {
+  const getCurrentChat = async (chatID) => {
     try {
-      const response = await axios.post(sendMessage, {
-        text: msg,
+      const response = await axios.get(`${getUserToChat}/${chatID}`);
+      setCurrentChat(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getMessage = async () => {
+    try {
+      const response = await axios.post(getMessages, {
         sender: currentUser._id,
-        receiver: userToChat._id,
+        receiver: currentChat._id,
+      });
+      setMessages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getRoom = async () => {
+    try {
+      const response = await axios.post(getChatRoom, {
+        sender: currentUser._id,
+        receiver: currentChat._id,
       });
 
-      const messageData = {
-        senderId: currentUser._id,
-        receiverId: userToChat._id,
-        text: msg,
-      };
+      setRoomId(response.data.roomId);
+      console.log(response.data.message, response.data.roomId);
 
-      // socket.io
-      socket.current.emit("sendMessage", messageData);
+      // join a room in socket.io
+      socket.current.emit("joinRoom", response.data.roomId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const sendMsg = async (messageInput) => {
+    try {
+      const response = await axios.post(sendMessage, {
+        sender: currentUser._id,
+        receiver: currentChat._id,
+        text: messageInput,
+      });
 
       setMessages((prev) => [...prev, response.data]);
+
+      const msgPayload = {
+        sender: currentUser._id,
+        receiver: currentChat._id,
+        text: messageInput,
+        room: roomId,
+        createdAt: response.data.createdAt,
+      };
+
+      // emit to socket.io
+      socket.current.emit("sendMessage", msgPayload);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    // PS. hiniwalay ko na sa isang useEffect kasi
+    // nag eerror kapag nireload ko yung page
+    // nagiging undefined yung socket.current.disconnect()
 
-    const getUserAndMessage = async () => {
-      try {
-        const chatUser = await axios.get(`${getUserToChat}/${id}`);
+    // connect to socket.io
+    socket.current = io(host);
+    console.log("Current chat: ", currentChat.username);
 
-        if (chatUser.status == 200) {
-          setUserToChat(chatUser.data);
-          console.log("UserToChat: ", chatUser.data._id);
+    // PS. nilagay ko dito kasi kapag nilagay ko sa const getMessage
+    // nagduduplicate yung receiveMessage data galing sa socket.io
 
-          // get/check user
-          try {
-            const userToken = localStorage.getItem("user_token");
+    // listen to the emit "receiveMessage"
+    // from the backend
+    // and add the receiveMssage data to the array state message
+    socket.current.on("receiveMessage", (data) => {
+      setMessages((prev) => [...prev, data]);
+    });
+  }, [currentChat]);
 
-            const user = await axios.post(checkuser, { userToken });
+  useEffect(() => {
+    if (!currentChat._id) {
+      console.log("wala");
 
-            if (user) {
-              // get messages
-              try {
-                const convoMessages = await axios.post(getMessages, {
-                  sender: user.data.userDetails._id,
-                  receiver: chatUser.data._id,
-                });
+      // get chatuser
+      // then is useEffect will re-run
+      // then it will proceed to else
+      // since the currentChat is not empty
+      getCurrentChat(id);
+    } else {
+      // if the currentChat is not empty
+      // get messages and store it in state
+      getMessage();
 
-                if (convoMessages) {
-                  setMessages(convoMessages.data);
-                  setIsLoading(false);
-                }
-              } catch (error) {
-                console.log(error);
-              }
-            }
-          } catch (error) {
-            console.log(error);
-          }
-        }
+      // get chat room id base on
+      // currentuser and chatuser id
+      getRoom();
 
-        if (chatUser.status == 400) {
-          return console.log(chatUser.data.message);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+      setIsLoading(false);
 
-    getUserAndMessage();
-  }, [id]);
+      // if the currecntChat changes
+      // it will disconnect and connect it again
+      // and join to other room
+      return () => {
+        socket.current.disconnect();
+      };
+    }
+  }, [currentChat]);
 
   return (
     <div className="convo-container">
@@ -127,14 +154,14 @@ function Convo() {
               />
               <img
                 src={
-                  userToChat.avatarImage
-                    ? `data:image/svg+xml;base64,${userToChat.avatarImage}`
+                  currentChat.avatarImage
+                    ? `data:image/svg+xml;base64,${currentChat.avatarImage}`
                     : ""
                 }
                 alt="avatar"
               />
 
-              <h2>{userToChat.username}</h2>
+              <h2>{currentChat.username}</h2>
             </div>
             <div className="right">
               <BsThreeDotsVertical className="menu" />
@@ -142,7 +169,7 @@ function Convo() {
           </header>
 
           <Messages messages={messages} />
-          <ChatInput message={sendMsg} />
+          <ChatInput messageInput={sendMsg} />
         </>
       )}
     </div>

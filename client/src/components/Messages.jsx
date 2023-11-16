@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Messages.css";
 import { Context } from "../App";
+import TimeAgo from "react-timeago";
 
 function Messages({ messages }) {
   const { currentUser } = useContext(Context);
@@ -26,17 +27,16 @@ function Messages({ messages }) {
           messages.map((msg, index) => (
             <div
               ref={scrollRef}
-              onClick={() => handleToggleDate(index)}
               className={`text-container ${
                 msg.sender === currentUser._id ? "sent" : "replied"
               }`}
               key={index}>
               <div className="text">
                 <div className="body-container">
-                  <p>{msg.text}</p>
+                  <p onClick={() => handleToggleDate(index)}>{msg.text}</p>
                 </div>
                 <span className={`date ${toggleDate === index ? "show" : ""}`}>
-                  Monday 4, 2023
+                  <TimeAgo date={msg.createdAt} />
                 </span>
               </div>
             </div>

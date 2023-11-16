@@ -10,6 +10,7 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 
 function SideNav({ contacts }) {
   const navigate = useNavigate();
+  const { setCurrentChat } = useContext(Context);
 
   const [selectedContact, setSelectedContact] = useState("");
   const [toggleOverlay, setToggleOverlay] = useState(false);
@@ -17,21 +18,12 @@ function SideNav({ contacts }) {
   const [confirm, setConfirm] = useState(false);
 
   const selectChat = async (details) => {
-    // socket.io
-    // socket.current = io("http://localhost:5000");
-    // console.log("Joined");
-
-    // socket.current.emit("join_room", {
-    //   username: currentUser.username,
-    //   roomID,
-    // });
-
-    // for ui
     setSelectedContact(details._id);
 
     try {
       const response = await axios.get(`${getUserToChat}/${details._id}`);
       if (response) {
+        setCurrentChat(response.data);
         navigate(`/${response.data._id}`);
       } else {
         console.log(response.data);

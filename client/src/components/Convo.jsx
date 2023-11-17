@@ -19,6 +19,8 @@ import Spinner from "./Spinner";
 import io from "socket.io-client";
 
 function Convo() {
+  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(true);
   const { currentUser, currentChat, setCurrentChat, socket } =
     useContext(Context);

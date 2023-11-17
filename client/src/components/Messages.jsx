@@ -23,7 +23,7 @@ function Messages({ messages }) {
   return (
     <div className="messages-container">
       <div className="message-scroll">
-        {messages &&
+        {messages.length > 0 ? (
           messages.map((msg, index) => (
             <div
               ref={scrollRef}
@@ -40,7 +40,10 @@ function Messages({ messages }) {
                 </span>
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <h1>Empty</h1>
+        )}
       </div>
     </div>
   );

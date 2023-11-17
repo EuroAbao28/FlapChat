@@ -1,6 +1,6 @@
 .home-container {
   display: flex;
-  height: 100vh;
+  height: 100svh;
   width: 100%;
   background-color: var(--clr-bg-base);
 

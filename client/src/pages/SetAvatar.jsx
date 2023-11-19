@@ -26,7 +26,6 @@ function SetAvatar() {
         image: avatars[selectedAvatar],
       });
 
-      console.log(response.data);
       toast.success(response.data.message, toastOptions);
       navigate("/");
     } catch (error) {
@@ -35,38 +34,27 @@ function SetAvatar() {
   };
 
   const setAvatarIndex = (index) => {
-    console.log(index);
     setSelectedAvatar(index);
   };
 
   useEffect(() => {
-    console.log("CURRENT USER FROM SETAVATAR", currentUser);
+    if (!currentUser) return navigate("/");
+
+    if (currentUser.avatarImage) return navigate("/");
 
     const getAvatars = async () => {
-      const userToken = localStorage.getItem("user_token");
+      const data = [];
 
-      if (userToken) {
-        axios.post(checkuser, { userToken }).then(async (response) => {
-          if (response.data.userDetails.isAvatarImageSet) {
-            navigate("/");
-          } else {
-            const data = [];
-
-            for (let i = 0; i < 3; i++) {
-              const image = await axios.get(
-                `${apiAvatar}/${Math.round(Math.random() * 1000)}`
-              );
-              const buffer = new Buffer(image.data);
-              data.push(buffer.toString("base64"));
-            }
-
-            setAvatars(data);
-            setIsLoading(false);
-          }
-        });
-      } else {
-        navigate("/login");
+      for (let i = 0; i < 3; i++) {
+        const image = await axios.get(
+          `${apiAvatar}/${Math.round(Math.random() * 1000)}`
+        );
+        const buffer = new Buffer(image.data);
+        data.push(buffer.toString("base64"));
       }
+
+      setAvatars(data);
+      setIsLoading(false);
     };
 
     getAvatars();

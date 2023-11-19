@@ -2,6 +2,105 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const userModel = require("../models/userModel");
 
+const addFriend = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { friendId } = req.body;
+
+    if (!userId || !friendId) {
+      return res
+        .status(400)
+        .json({ message: "User id and friend id are required" });
+    }
+
+    const user = await userModel.findById(userId);
+    const friend = await userModel.findById(friendId);
+
+    if (!user || !friend) {
+      return res.status(404).json({ message: "User or friend not found." });
+    }
+
+    if (!user.friends.includes(friendId)) {
+      user.friends.push(friendId);
+      await user.save();
+
+      res.status(200).json({ message: "Friend added successfully." });
+    } else {
+      res
+        .status(400)
+        .json({ message: "Friend is already in the user's friends list." });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json(error);
+  }
+};
+
+const removeFriend = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { friendId } = req.body;
+
+    if (!userId || !friendId) {
+      return res
+        .status(400)
+        .json({ message: "User id and friend id are required" });
+    }
+
+    const updatedFriends = await userModel.findOneAndUpdate(
+      { _id: userId },
+      { $pull: { friends: friendId } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Removed successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.json(error);
+  }
+};
+
+const searchUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { searchInput } = req.body;
+
+    if (!searchInput || !userId)
+      return res
+        .status(400)
+        .json({ message: "User id and search input is required" });
+
+    // get the user current friends to filter in searching
+    const user = await userModel.findById(userId);
+
+    // check muna kung merong user tugma sa pinasa sa params id
+    if (!user) return res.status(404).json({ message: "No user found" });
+
+    // this const is array because of the map method
+    // ang laman nya ay mga id, parang ganto
+    // "sampleID123", "sampleID098"
+    const friendsToExclude = user.friends.map((friend) => friend._id);
+
+    const results = await userModel.find({
+      username: new RegExp(searchInput, "i"),
+      // $ne = "not equal" sa id ng current user galing sa params
+      // $nin = "not in" that const, basically ganto. wag mo isama itong mga nandito na mga id
+      _id: { $ne: userId, $nin: friendsToExclude },
+    });
+
+    if (!results) {
+      res.status(404).json({ message: "No user found" });
+    }
+
+    res.status(200).json(results);
+  } catch (error) {
+    console.log(error);
+    res.json(error);
+  }
+};
+
 const getUserToChat = async (req, res) => {
   try {
     const userID = req.params.id;
@@ -39,7 +138,12 @@ const checkUser = async (req, res) => {
       try {
         const isUserExist = await userModel
           .findOne({ email: decoded.email })
-          .select(["username", "email", "avatarImage", "_id"]);
+          .populate({
+            path: "friends",
+            model: "User",
+            select: ["username", "email", "avatarImage", "_id", "friends"],
+          })
+          .select(["username", "email", "avatarImage", "_id", "friends"]);
 
         if (!isUserExist)
           return res
@@ -127,7 +231,6 @@ const setAvatar = async (req, res) => {
     const avatarImage = req.body.image;
 
     const user = await userModel.findByIdAndUpdate(userID, {
-      isAvatarImageSet: true,
       avatarImage,
     });
 
@@ -162,10 +265,13 @@ const generateToken = (userPayload) => {
 };
 
 module.exports = {
+  searchUser,
   checkUser,
   register,
   login,
   setAvatar,
   getAllUsers,
   getUserToChat,
+  addFriend,
+  removeFriend,
 };

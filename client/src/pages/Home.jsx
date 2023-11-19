@@ -11,7 +11,6 @@ function Home() {
   const { setCurrentUser } = useContext(Context);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
     const isUserValid = async () => {
@@ -21,23 +20,14 @@ function Home() {
       if (userToken) {
         try {
           const response = await axios.post(checkuser, { userToken });
-          if (response.data.userDetails.isAvatarImageSet == false) {
+          if (response.data.userDetails.avatarImage === "") {
             navigate("/setAvatar");
             setCurrentUser(response.data.userDetails);
             return;
           }
 
-          try {
-            const contacts = await axios.get(
-              `${getAllUsers}/${response.data.userDetails._id}`
-            );
-            setContacts(contacts.data);
-
-            setIsLoading(false);
-            setCurrentUser(response.data.userDetails);
-          } catch (error) {
-            console.log(error);
-          }
+          setIsLoading(false);
+          setCurrentUser(response.data.userDetails);
         } catch (error) {
           console.log(error);
           setIsLoading(false);
@@ -64,7 +54,7 @@ function Home() {
           </div>
         ) : (
           <>
-            <SideNav contacts={contacts} />
+            <SideNav />
             <Outlet />
           </>
         )}

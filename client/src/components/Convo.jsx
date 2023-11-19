@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Convo.css";
-import { Context } from "../App";
+import { Context, toastOptions } from "../App";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  checkuser,
   getChatRoom,
   getMessages,
   getUserToChat,
   host,
+  removeFriend,
   sendMessage,
 } from "../utils/APIRoutes";
 import axios from "axios";
@@ -17,18 +17,18 @@ import ChatInput from "./ChatInput";
 import Messages from "./Messages";
 import Spinner from "./Spinner";
 import io from "socket.io-client";
+import { toast } from "react-toastify";
 
 function Convo() {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
-  const { currentUser, currentChat, setCurrentChat, socket } =
+  const [toggleOptions, setToggleOptions] = useState(false);
+  const { currentUser, setCurrentUser, currentChat, setCurrentChat, socket } =
     useContext(Context);
   const { id } = useParams();
   const [messages, setMessages] = useState([]);
   const [roomId, setRoomId] = useState("");
-
-  useEffect(() => {}, []);
 
   const getCurrentChat = async (chatID) => {
     try {
@@ -59,7 +59,7 @@ function Convo() {
       });
 
       setRoomId(response.data.roomId);
-      console.log(response.data.message, response.data.roomId);
+      // console.log(response.data.message, response.data.roomId);
 
       // join a room in socket.io
       socket.current.emit("joinRoom", response.data.roomId);
@@ -100,7 +100,7 @@ function Convo() {
 
     // connect to socket.io
     socket.current = io(host);
-    console.log("Current chat: ", currentChat.username);
+    // console.log("Current chat: ", currentChat.username);
 
     // PS. nilagay ko dito kasi kapag nilagay ko sa const getMessage
     // nagduduplicate yung receiveMessage data galing sa socket.io
@@ -115,8 +115,6 @@ function Convo() {
 
   useEffect(() => {
     if (!currentChat._id) {
-      console.log("wala");
-
       // get chatuser
       // then is useEffect will re-run
       // then it will proceed to else
@@ -131,8 +129,6 @@ function Convo() {
       // currentuser and chatuser id
       getRoom();
 
-      setIsLoading(false);
-
       // if the currecntChat changes
       // it will disconnect and connect it again
       // and join to other room
@@ -141,6 +137,33 @@ function Convo() {
       };
     }
   }, [currentChat]);
+
+  useEffect(() => {
+    if (currentUser && currentChat && messages) {
+      setIsLoading(false);
+    }
+  }, [id]);
+
+  const handleRemoveFriend = async () => {
+    try {
+      const response = await axios.post(`${removeFriend}/${currentUser._id}`, {
+        friendId: currentChat._id,
+      });
+
+      toast.success(response.data.message, toastOptions);
+
+      // id galing sa usePrams
+      setCurrentUser((prev) => ({
+        ...prev,
+        friends: prev.friends.filter((user) => user._id !== id),
+      }));
+
+      setToggleOptions(false);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="convo-container">
@@ -166,7 +189,12 @@ function Convo() {
               <h2>{currentChat.username}</h2>
             </div>
             <div className="right">
-              <BsThreeDotsVertical className="menu" />
+              <BsThreeDotsVertical
+                onClick={() => setToggleOptions(!toggleOptions)}
+              />
+              <div className={`options ${toggleOptions && "show"}`}>
+                <p onClick={handleRemoveFriend}>Remove from contacts</p>
+              </div>
             </div>
           </header>
 

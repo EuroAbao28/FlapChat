@@ -2,20 +2,28 @@ import React, { useContext, useEffect, useState } from "react";
 import "./SideNav.css";
 import { LuSearch } from "react-icons/lu";
 import logo from "../assets/Chatting.png";
-import { Context } from "../App";
+import { Context, toastOptions } from "../App";
 import axios from "axios";
-import { getUserToChat, checkuser } from "../utils/APIRoutes";
+import {
+  getUserToChat,
+  checkuser,
+  searchUser,
+  addFriend,
+} from "../utils/APIRoutes";
 import { useNavigate } from "react-router-dom";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import { MdPersonAddAlt1 } from "react-icons/md";
+import { toast } from "react-toastify";
 
-function SideNav({ contacts }) {
+function SideNav() {
   const navigate = useNavigate();
-  const { setCurrentChat } = useContext(Context);
+  const { setCurrentChat, currentUser, setCurrentUser } = useContext(Context);
 
   const [selectedContact, setSelectedContact] = useState("");
   const [toggleOverlay, setToggleOverlay] = useState(false);
-  const [loggedInUser, setLoggedInUser] = useState({});
   const [confirm, setConfirm] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
 
   const selectChat = async (details) => {
     setSelectedContact(details._id);
@@ -47,25 +55,58 @@ function SideNav({ contacts }) {
     }
   };
 
+  // ADD KA NG SEARCHING MESSAGE
+  // ADD KA DIN NG NO USER FOUND
   useEffect(() => {
-    const userToken = localStorage.getItem("user_token");
-
-    const getUser = async () => {
-      if (userToken) {
+    const handleSearch = async () => {
+      if (searchInput.length > 1) {
         try {
-          const response = await axios.post(checkuser, { userToken });
-
-          setLoggedInUser(response.data.userDetails);
+          const results = await axios.post(`${searchUser}/${currentUser._id}`, {
+            searchInput,
+          });
+          setSearchResult(results.data);
         } catch (error) {
           console.log(error);
         }
       } else {
-        navigate("/login");
+        setSearchResult([]);
       }
     };
 
-    getUser();
-  }, []);
+    handleSearch();
+  }, [searchInput]);
+
+  const handleAddFriend = async (userData) => {
+    setSearchInput("");
+
+    const newFriend = {
+      _id: userData._id,
+      username: userData.username,
+      email: userData.email,
+      avatarImage: userData.avatarImage,
+      friends: userData.friend,
+    };
+
+    try {
+      const response = await axios.post(`${addFriend}/${currentUser._id}`, {
+        friendId: userData._id,
+      });
+
+      if (response.status !== 200) {
+        console.log(response.data.message);
+        return;
+      }
+
+      toast.success(response.data.message, toastOptions);
+
+      setCurrentUser((prev) => ({
+        ...prev,
+        friends: [...prev.friends, newFriend],
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="sidenav-container">
@@ -75,39 +116,61 @@ function SideNav({ contacts }) {
           <h1>FlapChat</h1>
         </div>
         <div className="profile" onClick={toggleProfileOverlay}>
-          {loggedInUser.avatarImage && (
+          {currentUser.avatarImage && (
             <img
-              src={`data:image/svg+xml;base64,${loggedInUser.avatarImage}`}
+              src={`data:image/svg+xml;base64,${currentUser.avatarImage}`}
               alt="avatar"
             />
           )}
         </div>
       </div>
       <div className="search-container">
-        <form>
-          <LuSearch />
-          <input type="text" placeholder="Search a user" />
-        </form>
+        <LuSearch />
+        <input
+          type="text"
+          value={searchInput}
+          onChange={(e) => {
+            setSearchInput(e.target.value);
+          }}
+          placeholder="Search a user"
+        />
       </div>
       <div className="contacts-container">
         <div className="scroll-container">
-          {contacts.map((contact, index) => (
-            <div
-              className={`card ${
-                selectedContact === contact._id && "selected"
-              }`}
-              key={index}
-              onClick={() => selectChat(contact)}>
-              <img
-                src={`data:image/svg+xml;base64,${contact.avatarImage}`}
-                alt="avatar"
-              />
-              <div className="info">
-                <h2>{contact.username}</h2>
-                <p>Hello po</p>
-              </div>
-            </div>
-          ))}
+          {!searchInput
+            ? currentUser.friends?.map((user, index) => (
+                <div
+                  className={`card ${
+                    selectedContact === user._id && "selected"
+                  }`}
+                  key={index}
+                  onClick={() => selectChat(user)}>
+                  <img
+                    src={`data:image/svg+xml;base64,${user.avatarImage}`}
+                    alt="avatar"
+                  />
+                  <div className="info">
+                    <h2>{user.username}</h2>
+                    <p>Hello po</p>
+                  </div>
+                </div>
+              ))
+            : searchResult.map((result, index) => (
+                <div className={`card`} key={index}>
+                  <div className="left">
+                    <img
+                      src={`data:image/svg+xml;base64,${result.avatarImage}`}
+                      alt="avatar"
+                    />
+                    <div className="info">
+                      <h2>{result.username}</h2>
+                    </div>
+                  </div>
+                  <div className="right">
+                    <MdPersonAddAlt1 onClick={() => handleAddFriend(result)} />
+                  </div>
+                </div>
+              ))}
         </div>
       </div>
       <div className={`profile-overlay ${toggleOverlay ? "show" : ""}`}>
@@ -115,13 +178,13 @@ function SideNav({ contacts }) {
         <section>
           <img
             src={
-              loggedInUser.avatarImage
-                ? `data:image/svg+xml;base64,${loggedInUser.avatarImage}`
+              currentUser.avatarImage
+                ? `data:image/svg+xml;base64,${currentUser.avatarImage}`
                 : ""
             }
             alt="avatar"
           />
-          <p>{loggedInUser.username}</p>
+          <p>{currentUser.username}</p>
         </section>
         <section onClick={handleLogout} className={confirm ? "red" : ""}>
           <RiLogoutCircleLine />

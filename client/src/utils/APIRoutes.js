@@ -8,6 +8,10 @@ export const checkuser = `${host}/api/auth/checkUser`;
 export const getAllUsers = `${host}/api/auth/getAllUsers`;
 export const getUserToChat = `${host}/api/auth/getUserToChat`;
 
+export const searchUser = `${host}/api/auth/searchUser`;
+export const addFriend = `${host}/api/auth/addFriend`;
+export const removeFriend = `${host}/api/auth/removeFriend`;
+
 export const sendMessage = `${host}/api/message/sendMessage`;
 export const getMessages = `${host}/api/message/getMessages`;
 

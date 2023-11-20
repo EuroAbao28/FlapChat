@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import "./Form.css";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/Chatting.png";
 import { toast } from "react-toastify";
 import { registerRoute } from "../utils/APIRoutes";
+import { toastOptions } from "../App";
 
 function Register() {
+  const navigate = useNavigate();
   const [isBtnDisable, setIsBtnDisable] = useState(false);
   const [form, setForm] = useState({
     username: "",
@@ -14,12 +16,6 @@ function Register() {
     password: "",
     confirmPassword: "",
   });
-
-  const toastOptions = {
-    className: "toast",
-    position: "top-right",
-    autoClose: 3000,
-  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -51,6 +47,8 @@ function Register() {
           .post(registerRoute, form)
           .then((response) => {
             toast.success(response.data.message, toastOptions);
+            localStorage.setItem("user_token", response.data.token);
+            navigate("/");
             console.log(response.data);
             setIsBtnDisable(false);
           })

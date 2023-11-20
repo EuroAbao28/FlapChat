@@ -27,6 +27,10 @@ function SideNav() {
   const [searchLoading, setSearchLoading] = useState(false);
 
   const selectChat = async (details) => {
+    if (selectedContact === details._id) {
+      setSelectedContact("");
+    }
+
     setSelectedContact(details._id);
 
     try {

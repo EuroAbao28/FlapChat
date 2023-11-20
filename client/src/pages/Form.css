@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .form-container form {
@@ -79,4 +80,17 @@
   font-weight: 600;
   padding: 0.1rem;
   cursor: pointer;
+}
+
+.form-container .developedBy {
+  color: var(--wht-4);
+  position: absolute;
+  bottom: 2rem;
+  text-align: center;
+}
+
+.developedBy h3 {
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.2rem;
 }

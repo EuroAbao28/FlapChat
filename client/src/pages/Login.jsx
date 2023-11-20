@@ -77,6 +77,10 @@ function Login() {
           Doesn't have an account yet? <Link to={"/register"}>Signup</Link>
         </div>
       </form>
+      <div className="developedBy">
+        <h3>Euro Abao</h3>
+        <p>Developed by</p>
+      </div>
     </div>
   );
 }

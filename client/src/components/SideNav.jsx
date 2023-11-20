@@ -24,6 +24,7 @@ function SideNav() {
   const [confirm, setConfirm] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const selectChat = async (details) => {
     setSelectedContact(details._id);
@@ -55,21 +56,22 @@ function SideNav() {
     }
   };
 
-  // ADD KA NG SEARCHING MESSAGE
-  // ADD KA DIN NG NO USER FOUND
   useEffect(() => {
     const handleSearch = async () => {
+      setSearchLoading(true);
       if (searchInput.length > 1) {
         try {
           const results = await axios.post(`${searchUser}/${currentUser._id}`, {
             searchInput,
           });
           setSearchResult(results.data);
+          setSearchLoading(false);
         } catch (error) {
           console.log(error);
         }
       } else {
         setSearchResult([]);
+        setSearchLoading(false);
       }
     };
 
@@ -137,8 +139,16 @@ function SideNav() {
       </div>
       <div className="contacts-container">
         <div className="scroll-container">
-          {!searchInput
-            ? currentUser.friends?.map((user, index) => (
+          {!searchInput ? (
+            // if the currentUser friends is empty, show message
+            currentUser.friends && currentUser.friends.length === 0 ? (
+              <div className="friendsEmpty">
+                <h2>No contacts yet</h2>
+                <p>Add a user to start a conversation</p>
+              </div>
+            ) : (
+              // if currentUser friends is not empty, show friends list
+              currentUser.friends?.map((user, index) => (
                 <div
                   className={`card ${
                     selectedContact === user._id && "selected"
@@ -155,22 +165,32 @@ function SideNav() {
                   </div>
                 </div>
               ))
-            : searchResult.map((result, index) => (
-                <div className={`card`} key={index}>
-                  <div className="left">
-                    <img
-                      src={`data:image/svg+xml;base64,${result.avatarImage}`}
-                      alt="avatar"
-                    />
-                    <div className="info">
-                      <h2>{result.username}</h2>
-                    </div>
-                  </div>
-                  <div className="right">
-                    <MdPersonAddAlt1 onClick={() => handleAddFriend(result)} />
+            )
+          ) : searchResult.length === 0 ? (
+            // if the searchResult array is empty, show message
+            <p className="searchMessage">No user found</p>
+          ) : searchLoading ? (
+            // if searchLoading is true, show message
+            <p className="searchMessage">Searching...</p>
+          ) : (
+            // if searchLoading if false, show result
+            searchResult.map((result, index) => (
+              <div className={`card`} key={index}>
+                <div className="left">
+                  <img
+                    src={`data:image/svg+xml;base64,${result.avatarImage}`}
+                    alt="avatar"
+                  />
+                  <div className="info">
+                    <h2>{result.username}</h2>
                   </div>
                 </div>
-              ))}
+                <div className="right">
+                  <MdPersonAddAlt1 onClick={() => handleAddFriend(result)} />
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
       <div className={`profile-overlay ${toggleOverlay ? "show" : ""}`}>

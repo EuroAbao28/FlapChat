@@ -39,6 +39,7 @@ body {
 
 .toast {
   font-size: 1.4rem;
+  color: var(--wht-8);
 }
 
 /* Customize the scrollbar track */

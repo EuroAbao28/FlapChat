@@ -38,9 +38,13 @@ function SetAvatar() {
   };
 
   useEffect(() => {
-    if (!currentUser) return navigate("/");
-
-    if (currentUser.avatarImage) return navigate("/");
+    if (
+      Object.keys(currentUser).length === 0 &&
+      currentUser.avatarImage !== ""
+    ) {
+      navigate("/");
+      return;
+    }
 
     const getAvatars = async () => {
       const data = [];

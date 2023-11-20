@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/Chatting.png";
 import { toast } from "react-toastify";
 import { registerRoute } from "../utils/APIRoutes";
+import { toastOptions } from "../App";
 
 function Register() {
   const navigate = useNavigate();
@@ -15,12 +16,6 @@ function Register() {
     password: "",
     confirmPassword: "",
   });
-
-  const toastOptions = {
-    className: "toast",
-    position: "top-right",
-    autoClose: 3000,
-  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

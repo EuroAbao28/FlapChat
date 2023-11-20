@@ -15,6 +15,9 @@ export const toastOptions = {
   className: "toast",
   position: "top-right",
   autoClose: 2000,
+  style: {
+    background: "#242d34",
+  },
 };
 
 function App() {

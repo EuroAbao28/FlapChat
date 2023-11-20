@@ -24,7 +24,7 @@ const addFriend = async (req, res) => {
       user.friends.push(friendId);
       await user.save();
 
-      res.status(200).json({ message: "Friend added successfully." });
+      res.status(200).json({ message: "Added to contact." });
     } else {
       res
         .status(400)

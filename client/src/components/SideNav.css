@@ -85,6 +85,25 @@
   width: 100%;
 }
 
+.contacts-container .scroll-container .searchMessage {
+  color: var(--wht-8);
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.contacts-container .scroll-container .friendsEmpty {
+  color: var(--wht-4);
+  text-align: center;
+}
+
+.friendsEmpty h2 {
+  font-size: 1.6rem;
+}
+
+.friendsEmpty p {
+  font-size: 1.2rem;
+}
+
 .contacts-container .scroll-container .card {
   padding: 1rem;
   color: var(--wht-8);
@@ -140,8 +159,8 @@
 .sidenav-container .profile-overlay {
   background-color: var(--clr-bg-base-lighter);
   position: absolute;
-  border-top-left-radius: 3rem;
-  border-top-right-radius: 3rem;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
   width: 100%;
   display: flex;
   flex-direction: column;

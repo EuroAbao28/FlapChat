@@ -9,7 +9,6 @@ import {
   checkuser,
   searchUser,
   addFriend,
-  getLatestMessage,
 } from "../utils/APIRoutes";
 import { useNavigate } from "react-router-dom";
 import { RiLogoutCircleLine } from "react-icons/ri";
@@ -115,19 +114,19 @@ function SideNav() {
     }
   };
 
-  const handleGetLatestMessage = async (friendId) => {
-    try {
-      const lastestMessage = await axios.post(getLatestMessage, {
-        sender: currentUser._id,
-        receiver: friendId,
-      });
-      if (!lastestMessage.data.text) return "wala";
+  // const handleGetLatestMessage = async (friendId) => {
+  //   try {
+  //     const lastestMessage = await axios.post(getLatestMessage, {
+  //       sender: currentUser._id,
+  //       receiver: friendId,
+  //     });
+  //     if (!lastestMessage.data.text) return "wala";
 
-      return lastestMessage.data.text;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     return lastestMessage.data.text;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="sidenav-container">

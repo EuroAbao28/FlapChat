@@ -22,7 +22,7 @@ app.use("/api/chatRoom", require("./routes/chatRoomRoutes"));
 
 const io = new Server(server, {
   cors: {
-    origin: "https://flap-chat.vercel.app",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
   },
 });

@@ -141,7 +141,7 @@ const checkUser = async (req, res) => {
           .populate({
             path: "friends",
             model: "User",
-            select: ["username", "email", "avatarImage", "_id", "friends"],
+            select: ["username", "email", "avatarImage", "_id"],
           })
           .select(["username", "email", "avatarImage", "_id", "friends"]);
 

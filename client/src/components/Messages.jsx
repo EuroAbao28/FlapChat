@@ -22,25 +22,29 @@ function Messages({ messages }) {
 
   return (
     <div className="messages-container">
-      <div className="message-scroll">
-        {messages.map((msg, index) => (
-          <div
-            ref={scrollRef}
-            className={`text-container ${
-              msg.sender === currentUser._id ? "sent" : "replied"
-            }`}
-            key={index}>
-            <div className="text">
-              <div className="body-container">
-                <p onClick={() => handleToggleDate(index)}>{msg.text}</p>
+      {messages.length > 0 ? (
+        <div className="message-scroll">
+          {messages.map((msg, index) => (
+            <div
+              ref={scrollRef}
+              className={`text-container ${
+                msg.sender === currentUser._id ? "sent" : "replied"
+              }`}
+              key={index}>
+              <div className="text">
+                <div className="body-container">
+                  <p onClick={() => handleToggleDate(index)}>{msg.text}</p>
+                </div>
+                <span className={`date ${toggleDate === index ? "show" : ""}`}>
+                  <TimeAgo date={msg.createdAt} />
+                </span>
               </div>
-              <span className={`date ${toggleDate === index ? "show" : ""}`}>
-                <TimeAgo date={msg.createdAt} />
-              </span>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <p className="emptyConvo">Start a conversation.</p>
+      )}
     </div>
   );
 }

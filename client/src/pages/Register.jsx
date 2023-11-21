@@ -9,7 +9,7 @@ import { toastOptions } from "../App";
 
 function Register() {
   const navigate = useNavigate();
-  const [isBtnDisable, setIsBtnDisable] = useState(false);
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -23,24 +23,24 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsBtnDisable(true);
+    setIsBtnLoading(true);
 
     const { username, email, password, confirmPassword } = form;
 
     if (!username || !email || !password || !confirmPassword) {
       toast.error("All fields are required", toastOptions);
-      setIsBtnDisable(false);
+      setIsBtnLoading(false);
       return;
     }
 
     if (password.length < 4) {
       toast.error("Password too short", toastOptions);
-      setIsBtnDisable(false);
+      setIsBtnLoading(false);
       return;
     } else {
       if (password !== confirmPassword) {
         toast.error("Password does not match", toastOptions);
-        setIsBtnDisable(false);
+        setIsBtnLoading(false);
         return;
       } else {
         axios
@@ -50,12 +50,12 @@ function Register() {
             localStorage.setItem("user_token", response.data.token);
             navigate("/");
             console.log(response.data);
-            setIsBtnDisable(false);
+            setIsBtnLoading(false);
           })
           .catch((err) => {
             console.log(err.response.data.message);
             toast.error(err.response.data.message, toastOptions);
-            setIsBtnDisable(false);
+            setIsBtnLoading(false);
           });
       }
     }
@@ -94,9 +94,9 @@ function Register() {
         />
         <button
           type="submit"
-          disabled={isBtnDisable}
-          className={isBtnDisable ? "disabled" : ""}>
-          Create account
+          disabled={isBtnLoading}
+          className={isBtnLoading ? "disabled" : ""}>
+          {isBtnLoading ? "Creating user..." : "Create account"}
         </button>
         <div className="switch">
           Already have an account? <Link to={"/login"}>Login</Link>

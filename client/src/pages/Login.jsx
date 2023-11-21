@@ -9,7 +9,7 @@ import { toastOptions } from "../App";
 
 function Login() {
   const navigate = useNavigate();
-  const [isBtnDisable, setIsBtnDisable] = useState(false);
+  const [isBtnLoading, setisBtnLoading] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -21,13 +21,13 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsBtnDisable(true);
+    setisBtnLoading(true);
 
     const { email, password } = form;
 
     if (!email || !password) {
       toast.error("All fields are required", toastOptions);
-      setIsBtnDisable(false);
+      setisBtnLoading(false);
       return;
     } else {
       axios
@@ -36,13 +36,13 @@ function Login() {
           // console.log(response.data);
           localStorage.setItem("user_token", response.data.token);
           toast.success(response.data.message, toastOptions);
-          setIsBtnDisable(false);
+          setisBtnLoading(false);
           navigate("/");
         })
         .catch((err) => {
           // console.log(err.response.data.message);
           toast.error(err.response.data.message, toastOptions);
-          setIsBtnDisable(false);
+          setisBtnLoading(false);
         });
     }
   };
@@ -69,9 +69,9 @@ function Login() {
 
         <button
           type="submit"
-          disabled={isBtnDisable}
-          className={isBtnDisable ? "disabled" : ""}>
-          Login
+          disabled={isBtnLoading}
+          className={isBtnLoading ? "loading" : ""}>
+          {isBtnLoading ? "Logging in..." : "Login"}
         </button>
         <div className="switch">
           Doesn't have an account yet? <Link to={"/register"}>Signup</Link>

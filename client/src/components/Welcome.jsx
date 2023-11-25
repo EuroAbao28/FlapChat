@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Welcome.css";
-import Icon from "../assets/welcome.gif";
+import { Context } from "../App";
 
 function Welcome() {
+  const { currentUser } = useContext(Context);
   return (
     <div className="welcome-container">
-      <img src={Icon} alt="logo" />
       <h1>
-        Welcome, <span>Orue</span>
+        Welcome, <span>{currentUser.username}</span>
       </h1>
-      <p>Select a friend to start chatting</p>
+      <p>Select a friend to start a conversation.</p>
     </div>
   );
 }

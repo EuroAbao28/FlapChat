@@ -11,15 +11,15 @@
 }
 
 .welcome-container h1 {
-  color: var(--wht-8);
+  color: var(--wht-4);
   font-size: 3.6rem;
 }
 
-.welcome-container h1 span {
-  color: aqua;
-}
+/* .welcome-container h1 span {
+  color: var(--wht-8);
+} */
 
 .welcome-container p {
   font-size: 1.6rem;
-  color: var(--wht-8);
+  color: var(--wht-4);
 }
